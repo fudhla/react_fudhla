@@ -2,11 +2,25 @@ import { useState } from "react";
 import frameworkData from "./framework.json";
 
 export default function FrameworkListSearchFilter() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedTag, setSelectedTag] = useState("");
+//   const [searchTerm, setSearchTerm] = useState("");
+//   const [selectedTag, setSelectedTag] = useState("");
+	const [dataForm, setDataForm] = useState({
+			searchTerm: "",
+			selectedTag: "",
+			/*Tambah state lain beserta default value*/
+			});
+		
+		/*Inisialisasi Handle perubahan nilai input form*/
+		const handleChange = (evt) => {
+			const { name, value } = evt.target;
+			setDataForm({
+				...dataForm,
+				[name]: value,
+			});
+		};
 
   /** Deklarasi Logic Search & Filter **/
-  const _searchTerm = searchTerm.toLowerCase();
+  const _searchTerm = dataForm.searchTerm.toLowerCase();
   const filteredFrameworks = frameworkData.filter((framework) => {
     const matchesSearch =
       framework.name
@@ -16,7 +30,9 @@ export default function FrameworkListSearchFilter() {
              .toLowerCase()
              .includes(_searchTerm);
 
-    const matchesTag = selectedTag ? framework.tags.includes(selectedTag) : true;
+    const matchesTag = dataForm.selectedTag 
+    ? framework.tags.includes(dataForm.selectedTag) 
+    : true;
 
     return matchesSearch && matchesTag;
   });
@@ -36,20 +52,18 @@ export default function FrameworkListSearchFilter() {
 
             <div className="w-full max-w-7xl mx-auto relative z-10">
 
-                {/* Input persis seperti yang kamu minta */}
                 <input
                   type="text"
                   name="searchTerm"
                   placeholder="Search framework..."
-                  className="w-full p-3 bg-white/[0.05] border border-white/10 rounded-xl text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all mb-4 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md"
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full p-3 bg-white/[0.05] border border-white/10 rounded-xl text-slate-900 placeholder:text-slate-500 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all mb-4 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md"
+                  onChange={handleChange}
                 />
 
-                {/* Select persis seperti yang kamu minta */}
                 <select
                   name="selectedTag"
-                  className="w-full p-3 bg-slate-900 border border-white/10 rounded-xl text-slate-200 cursor-pointer focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all mb-4 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md"
-                  onChange={(e) => setSelectedTag(e.target.value)}
+                  className="w-full p-3 bg-slate-100 border border-white/10 rounded-xl text-slate-900 cursor-pointer focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all mb-4 shadow-[0_4px_20px_rgba(0,0,0,0.3)] backdrop-blur-md"
+                  onChange={handleChange}
                 >
                  <option value="">All Tags</option>
                   {allTags.map((tag, index) => (
